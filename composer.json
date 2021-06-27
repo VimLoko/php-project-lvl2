@@ -1,13 +1,23 @@
 {
     "name": "hexlet/code",
     "description": "Generate diff",
+    "license": "MIT",
     "authors": [
         {
             "name": "Proggit",
             "email": "proggit@mail.ru"
         }
     ],
+    "autoload": {
+        "files": [
+            "src/GenDiff.php"
+        ]
+    },
+    "bin": [
+        "bin/gendiff"
+    ],
     "require": {
-        "docopt/docopt": "^1.0"
+        "docopt/docopt": "^1.0",
+        "ext-json": "*"
     }
 }
