@@ -39,7 +39,7 @@ function mergeArraysKeys(array ...$arrays): array
 function formating(array $array): string
 {
     $mergeKeyValue = array_map(
-        function($key, $value) {
+        function ($key, $value) {
             $key = toString($key);
             $value = toString($value);
             return "  {$key}: {$value}";
@@ -58,7 +58,7 @@ function gendiff(string $firstFile, string $secondFile): string
     $keys = mergeArraysKeys($firstFileContent, $secondFileContent);
     sort($keys);
     $result = [];
-    foreach ($keys as  $key) {
+    foreach ($keys as $key) {
         $existKeyInFirstAr = array_key_exists($key, $firstFileContent);
         $existKeyInSecondAr = array_key_exists($key, $secondFileContent);
         $valueFirstAr = $firstFileContent[$key] ?? null;
@@ -66,7 +66,7 @@ function gendiff(string $firstFile, string $secondFile): string
         if ($existKeyInFirstAr && $existKeyInSecondAr) {
             if ($valueFirstAr === $valueSecondAr) {
                 $result["  {$key}"] = $valueFirstAr;
-            } else  {
+            } else {
                 $result["- {$key}"] = $valueFirstAr;
                 $result["+ {$key}"] = $valueSecondAr;
             }
