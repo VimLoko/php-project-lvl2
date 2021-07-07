@@ -2,6 +2,9 @@
 
 namespace Differ\Differ;
 
+use SplFileInfo;
+use function Differ\Parsers\parser;
+
 function readFile(string $path): string
 {
     if (!file_exists($path)) {
@@ -10,9 +13,9 @@ function readFile(string $path): string
     return file_get_contents($path, true);
 }
 
-function jsonToArray(string $json): array
+function getExt(string $filePath): string
 {
-    return json_decode($json, true, 512, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR) ?? [];
+    return (new SplFileInfo($filePath))->getExtension();
 }
 
 function toString($value): string
@@ -48,8 +51,8 @@ function formating(array $array): string
 
 function gendiff(string $firstFile, string $secondFile): string
 {
-    $firstFileContent = jsonToArray(readFile($firstFile));
-    $secondFileContent = jsonToArray(readFile($secondFile));
+    $firstFileContent = parser(readFile($firstFile), getExt($firstFile));
+    $secondFileContent = parser(readFile($secondFile), getExt($secondFile));
     $keys = mergeArraysKeys($firstFileContent, $secondFileContent);
     sort($keys);
     $result = [];

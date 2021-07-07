@@ -16,7 +16,8 @@
             "Differ\\Differ\\Tests\\": "tests"
         },
         "files": [
-            "src/GenDiff.php"
+            "src/GenDiff.php",
+            "src/Parsers.php"
         ]
     },
     "bin": [
@@ -24,7 +25,8 @@
     ],
     "require": {
         "docopt/docopt": "^1.0",
-        "ext-json": "*"
+        "ext-json": "*",
+        "symfony/yaml": "^5.0"
     },
     "require-dev": {
         "phpstan/phpstan-phpunit": "^0.12.16",
