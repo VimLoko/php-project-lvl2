@@ -3,6 +3,7 @@
 namespace Differ\Differ;
 
 use SplFileInfo;
+
 use function Differ\Parsers\parser;
 
 function readFile(string $path): string
