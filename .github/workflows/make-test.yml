@@ -1,0 +1,21 @@
+name: make-test
+
+on:
+  push:
+    branches:
+      - '**'
+    tags:
+      - '**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Make install
+        run: make install
+
+      - name: Make test
+        run: make test

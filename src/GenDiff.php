@@ -1,9 +1,7 @@
 <?php
+
 namespace Differ\Differ;
 
-/**
- * @throws \Exception
- */
 function readFile(string $path): string
 {
     if (!file_exists($path)) {
@@ -12,15 +10,12 @@ function readFile(string $path): string
     return file_get_contents($path, true);
 }
 
-/**
- * @throws \JsonException
- */
 function jsonToArray(string $json): array
 {
-    return json_decode($json, true, 512, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR);
+    return json_decode($json, true, 512, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR) ?? [];
 }
 
-function toString($value)
+function toString($value): string
 {
     return trim(var_export($value, true), "'");
 }
