@@ -5,6 +5,7 @@ namespace Differ\Differ;
 use SplFileInfo;
 
 use function Differ\Parsers\parser;
+use function Differ\Formatter\format;
 
 function readFile(string $path): string
 {
@@ -19,8 +20,11 @@ function getExt(string $filePath): string
     return (new SplFileInfo($filePath))->getExtension();
 }
 
-function toString($value): string
+function toString($value)
 {
+    if (is_object($value)) {
+        return $value;
+    }
     return trim(var_export($value, true), "'");
 }
 
@@ -50,32 +54,55 @@ function formating(array $array): string
     return "{\n{$implodeAr}\n}\n";
 }
 
-function gendiff(string $firstFile, string $secondFile): string
+function genDiffAST(object $firstFile, object $secondFile): array
+{
+    $firstFileAr = get_object_vars($firstFile);
+    $secondFileAr = get_object_vars($secondFile);
+    $keys = mergeArraysKeys($firstFileAr, $secondFileAr);
+    sort($keys);
+    return array_map(function ($key) use ($firstFileAr, $secondFileAr) {
+        if (!array_key_exists($key, $secondFileAr)) {
+            return [
+                "key" => $key,
+                "type" => "deleted",
+                "value" => $firstFileAr[$key]
+            ];
+        }
+        if (!array_key_exists($key, $firstFileAr)) {
+            return [
+                "key" => $key,
+                "type" => "added",
+                "value" => $secondFileAr[$key]
+            ];
+        }
+        if (is_object($secondFileAr[$key]) && is_object($firstFileAr[$key])) {
+            return [
+                "key" => $key,
+                "type" => "nested",
+                "children" => genDiffAST($firstFileAr[$key], $secondFileAr[$key])
+            ];
+        }
+        if ($secondFileAr[$key] !== $firstFileAr[$key]) {
+            return [
+                "key" => $key,
+                "type" => "changed",
+                "value" => $secondFileAr[$key],
+                "oldValue" => $firstFileAr[$key]
+            ];
+        }
+
+        return [
+            "key" => $key,
+            "type" => 'unchanged',
+            "value" => $secondFileAr[$key]
+        ];
+    }, $keys);
+}
+
+function gendiff(string $firstFile, string $secondFile, string $format = 'stylish'): string
 {
     $firstFileContent = parser(readFile($firstFile), getExt($firstFile));
     $secondFileContent = parser(readFile($secondFile), getExt($secondFile));
-    $keys = mergeArraysKeys($firstFileContent, $secondFileContent);
-    sort($keys);
-    $result = [];
-    foreach ($keys as $key) {
-        $existKeyInFirstAr = array_key_exists($key, $firstFileContent);
-        $existKeyInSecondAr = array_key_exists($key, $secondFileContent);
-        $valueFirstAr = $firstFileContent[$key] ?? null;
-        $valueSecondAr = $secondFileContent[$key] ?? null;
-        if ($existKeyInFirstAr && $existKeyInSecondAr) {
-            if ($valueFirstAr === $valueSecondAr) {
-                $result["  {$key}"] = $valueFirstAr;
-            } else {
-                $result["- {$key}"] = $valueFirstAr;
-                $result["+ {$key}"] = $valueSecondAr;
-            }
-        }
-        if ($existKeyInFirstAr && !$existKeyInSecondAr) {
-            $result["- {$key}"] = $valueFirstAr;
-        }
-        if (!$existKeyInFirstAr && $existKeyInSecondAr) {
-            $result["+ {$key}"] = $valueSecondAr;
-        }
-    }
-    return formating($result);
+    $diffAST = genDiffAST($firstFileContent, $secondFileContent);
+    return format($diffAST, $format);
 }
