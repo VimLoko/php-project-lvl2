@@ -4,6 +4,9 @@ namespace Differ\Formatters\Plain;
 
 function stringify($value)
 {
+    if ($value === 0) {
+        return $value;
+    }
     $type = gettype($value);
     switch ($type) {
         case 'array':
