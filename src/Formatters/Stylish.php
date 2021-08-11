@@ -2,7 +2,10 @@
 
 namespace Differ\Formatters\Stylish;
 
-function stringify($value, $depth)
+/**
+ * @param string|integer|boolean|object|null $value
+ */
+function stringify($value, int $depth): string
 {
     if (is_bool($value)) {
         return $value ? 'true' : 'false';
@@ -18,9 +21,8 @@ function stringify($value, $depth)
     if (is_string($value)) {
         return $value;
     }
-
     $closingIndent = str_repeat(" ", $depth * 4);
-    $strings = array_map(function ($key) use ($value, $depth) {
+    $strings = array_map(function (string $key) use ($value, $depth) {
         $indent = str_repeat(" ", ($depth + 1) * 4);
         $stringedVal = stringify($value->$key, $depth + 1);
         return "{$indent}{$key}: {$stringedVal}";
@@ -30,11 +32,15 @@ function stringify($value, $depth)
     return "{\n{$result}\n{$closingIndent}}";
 }
 
-function build(array $data, $depth = 1)
+/**
+ * @param array<array<string, mixed>> $data
+ * @return string
+ */
+function build(array $data, int $depth = 1): string
 {
     $indent = str_repeat(" ", $depth * 4);
     $indentInner = str_repeat(" ", $depth * 4 - 2);
-    $result = array_map(function ($item) use ($indent, $indentInner, $depth) {
+    $result = array_map(function (array $item) use ($indent, $indentInner, $depth) {
         ['key' => $key, 'type' => $type] = $item;
         $value = $item['value'] ?? null;
 
@@ -66,7 +72,11 @@ function build(array $data, $depth = 1)
     return implode("\n", $result);
 }
 
-function format(array $diff)
+/**
+ * @param array<array<string, mixed>> $diff
+ * @return string
+ */
+function format(array $diff): string
 {
     $result = build($diff);
     return "{\n{$result}\n}";

@@ -13,6 +13,6 @@ function parser(string $data, string $format): object
         case "yaml":
             return Yaml::parse($data, Yaml::PARSE_OBJECT_FOR_MAP);
         default:
-            throw new Exception("Wrong file extension: {$format}");
+            throw new \Exception("Wrong file extension: {$format}");
     }
 }

@@ -12,7 +12,7 @@ function readFile(string $path): string
     if (!file_exists($path)) {
         throw new \Exception("Can't find file in {$path}");
     }
-    return file_get_contents($path, true);
+    return file_get_contents($path, true) ?: '';
 }
 
 function getExt(string $filePath): string
@@ -20,6 +20,10 @@ function getExt(string $filePath): string
     return (new SplFileInfo($filePath))->getExtension();
 }
 
+/**
+ * @param string|integer|boolean|object $value
+ * @return object|string
+ */
 function toString($value)
 {
     if (is_object($value)) {
@@ -28,6 +32,10 @@ function toString($value)
     return trim(var_export($value, true), "'");
 }
 
+/**
+ * @param array<array> $arrays
+ * @return array<string>
+ */
 function mergeArraysKeys(array ...$arrays): array
 {
     $result = [];
@@ -39,6 +47,10 @@ function mergeArraysKeys(array ...$arrays): array
     );
 }
 
+/**
+ * @param array<array<string, mixed>> $array
+ * @return string
+ */
 function formating(array $array): string
 {
     $mergeKeyValue = array_map(
@@ -54,6 +66,9 @@ function formating(array $array): string
     return "{\n{$implodeAr}\n}\n";
 }
 
+/**
+ * @return array<array<string, mixed>>
+ */
 function genDiffAST(object $firstFile, object $secondFile): array
 {
     $firstFileAr = get_object_vars($firstFile);

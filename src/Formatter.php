@@ -6,6 +6,9 @@ use function Differ\Formatters\Stylish\format as stylishFormat;
 use function Differ\Formatters\Plain\format as plainFormat;
 use function Differ\Formatters\Json\format as jsonFormat;
 
+/**
+ * @param array<array<string, mixed>> $data
+ */
 function format(array $data, string $format): string
 {
     switch ($format) {
@@ -15,10 +18,7 @@ function format(array $data, string $format): string
             return plainFormat($data);
         case "json":
             return jsonFormat($data);
-//        case "yml":
-//        case "yaml":
-//            return Yaml::parse($data, Yaml::PARSE_OBJECT_FOR_MAP);
         default:
-            throw new Exception("Wrong file extension: {$format}");
+            throw new \Exception("Wrong file extension: {$format}");
     }
 }

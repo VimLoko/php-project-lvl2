@@ -2,11 +2,12 @@
 
 namespace Differ\Formatters\Plain;
 
+/**
+ * @param string|integer $value
+ * @return string|integer
+ */
 function stringify($value)
 {
-    if ($value === 0) {
-        return $value;
-    }
     $type = gettype($value);
     switch ($type) {
         case 'array':
@@ -17,17 +18,21 @@ function stringify($value)
         case 'boolean':
             return $value ? 'true' : 'false';
         default:
-            return "'$value'";
+            return $value === 0 ? $value : "'$value'";
     }
 }
 
-function build(array $data, $ancestry = '')
+/**
+ * @param array<array<string, mixed>> $data
+ * @return array<string>
+ */
+function build(array $data, string $ancestry = ''): array
 {
-    $filtered = array_filter($data, function ($node) {
+    $filtered = array_filter($data, function (array $node) {
         return $node['type'] != 'unchanged';
     });
 
-    $mapping = array_map(function ($node) use ($ancestry) {
+    $mapping = array_map(function (array $node) use ($ancestry) {
         $newAncestry = $ancestry . $node['key'];
         $type = $node['type'];
 
@@ -57,7 +62,11 @@ function build(array $data, $ancestry = '')
     return $mapping;
 }
 
-function format(array $diff)
+/**
+ * @param array<array<string, mixed>> $diff
+ * @return string
+ */
+function format(array $diff): string
 {
     return implode("\n", (build($diff)));
 }

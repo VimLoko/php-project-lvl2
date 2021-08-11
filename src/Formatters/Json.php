@@ -2,7 +2,10 @@
 
 namespace Differ\Formatters\Json;
 
-function format(array $diff)
+/**
+ * @param array<array<string, mixed>> $diff
+ */
+function format(array $diff): string
 {
-    return json_encode($diff);
+    return json_encode($diff) ?: '';
 }
