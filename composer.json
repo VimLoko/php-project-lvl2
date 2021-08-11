@@ -32,7 +32,7 @@
         "ext-json": "*",
         "php": "^7.2||^8.0",
         "symfony/yaml": "^5.0",
-        "funct/funct": "^1.5"
+        "lstrojny/functional-php": "^1.17"
     },
     "require-dev": {
         "phpstan/phpstan-phpunit": "^0.12.16",
