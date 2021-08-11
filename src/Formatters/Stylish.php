@@ -40,25 +40,25 @@ function build(array $data, $depth = 1)
 
         if ($type === "added") {
             $val = stringify($value, $depth);
-            return rtrim("{$indentInner}+ {$key}: {$val}");
+            return "{$indentInner}+ {$key}: {$val}";
         }
         if ($type === "deleted") {
             $val = stringify($value, $depth);
-            return rtrim("{$indentInner}- {$key}: {$val}");
+            return "{$indentInner}- {$key}: {$val}";
         }
         if ($type === "nested") {
             $val = build($item['children'], $depth + 1);
-            return rtrim("{$indent}{$key}: {\n{$val}\n{$indent}}");
+            return "{$indent}{$key}: {\n{$val}\n{$indent}}";
         }
         if ($type === "changed") {
             $oldVal = stringify($item['oldValue'], $depth);
             $val = stringify($value, $depth);
-            $strOut = rtrim("{$indentInner}- {$key}: {$oldVal}");
-            $strOff = rtrim("{$indentInner}+ {$key}: {$val}");
+            $strOut = "{$indentInner}- {$key}: {$oldVal}";
+            $strOff = "{$indentInner}+ {$key}: {$val}";
             return "{$strOut}\n{$strOff}";
         }
         if ($type === "unchanged") {
-            return rtrim("{$indent}{$key}: {$value}");
+            return "{$indent}{$key}: {$value}";
         }
         throw new \Exception("Unknown type: {$type}");
     }, $data);
