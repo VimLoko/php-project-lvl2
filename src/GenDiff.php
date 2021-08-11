@@ -12,7 +12,11 @@ function readFile(string $path): string
     if (!file_exists($path)) {
         throw new \Exception("Can't find file in {$path}");
     }
-    return file_get_contents($path, true) ?: '';
+    $fileContent = file_get_contents($path, true);
+    if (is_bool($fileContent)) {
+        return '';
+    }
+    return $fileContent;
 }
 
 function getExt(string $filePath): string

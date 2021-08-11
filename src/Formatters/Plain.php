@@ -16,7 +16,7 @@ function stringify($value)
         case 'NULL':
             return 'null';
         case 'boolean':
-            return $value === true ? 'true' : 'false';
+            return $value == true ? 'true' : 'false';
         default:
             return $value === 0 ? $value : "'$value'";
     }
