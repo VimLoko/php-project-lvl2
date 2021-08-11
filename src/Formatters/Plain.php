@@ -52,8 +52,8 @@ function build(array $data, string $ancestry = ''): array
                 return sprintf($formatView, $newAncestry, $oldval, $newVal);
 
             case 'nested':
-                $newAncestry = $newAncestry . '.';
-                $result = build($node['children'], $newAncestry);
+                $newAncestryDot = $newAncestry . '.';
+                $result = build($node['children'], $newAncestryDot);
                 return implode("\n", $result);
             default:
                 throw new \Exception("Unknown type {$type}");

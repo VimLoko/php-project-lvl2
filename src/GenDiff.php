@@ -42,7 +42,7 @@ function toString($value)
  */
 function mergeArraysKeys(array ...$arrays): array
 {
-    $result = array_map(function ($array) {
+    $result = array_map(function ($array): array {
         return array_keys($array);
     }, $arrays);
     return array_values(
@@ -60,9 +60,9 @@ function formating(array $array): string
 {
     $mergeKeyValue = array_map(
         function ($key, $value) {
-            $key = toString($key);
-            $value = toString($value);
-            return "  {$key}: {$value}";
+            $keyStr = toString($key);
+            $valueStr = toString($value);
+            return "  {$keyStr}: {$valueStr}";
         },
         array_keys($array),
         $array
