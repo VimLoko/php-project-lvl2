@@ -80,7 +80,7 @@ function genDiffAST(object $firstFile, object $secondFile): array
     $firstFileAr = get_object_vars($firstFile);
     $secondFileAr = get_object_vars($secondFile);
     $keys = mergeArraysKeys($firstFileAr, $secondFileAr);
-    $sortedKeys = sort($keys, function ($left, $right) {
+    $sortedKeys = sort($keys, function ($left, $right): int {
         return strcmp($left, $right);
     });
     return array_map(function ($key) use ($firstFileAr, $secondFileAr) {
