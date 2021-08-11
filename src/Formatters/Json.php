@@ -9,7 +9,7 @@ namespace Differ\Formatters\Json;
 function format(array $diff)
 {
     $json = json_encode($diff);
-    if (!$json) {
+    if (is_bool($json)) {
         return '';
     }
     return $json;
