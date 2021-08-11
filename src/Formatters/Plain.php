@@ -16,7 +16,7 @@ function stringify($value)
         case 'NULL':
             return 'null';
         case 'boolean':
-            return $value ? 'true' : 'false';
+            return $value === true ? 'true' : 'false';
         default:
             return $value === 0 ? $value : "'$value'";
     }
@@ -28,11 +28,11 @@ function stringify($value)
  */
 function build(array $data, string $ancestry = ''): array
 {
-    $filtered = array_filter($data, function (array $node) {
+    $filtered = array_filter($data, function (array $node): bool {
         return $node['type'] != 'unchanged';
     });
 
-    $mapping = array_map(function (array $node) use ($ancestry) {
+    $mapping = array_map(function (array $node) use ($ancestry): string {
         $newAncestry = $ancestry . $node['key'];
         $type = $node['type'];
 
@@ -52,7 +52,7 @@ function build(array $data, string $ancestry = ''): array
                 return sprintf($formatView, $newAncestry, $oldval, $newVal);
 
             case 'nested':
-                $newAncestry .= '.';
+                $newAncestry = $newAncestry . '.';
                 $result = build($node['children'], $newAncestry);
                 return implode("\n", $result);
             default:
