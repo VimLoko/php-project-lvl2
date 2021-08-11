@@ -72,6 +72,16 @@ function formating(array $array): string
 }
 
 /**
+ * @param array<string> $array
+ * @return array
+ */
+function nonMutationSort(array $array): array
+{
+    sort($array);
+    return $array;
+}
+
+/**
  * @return array<array<string, mixed>>
  */
 function genDiffAST(object $firstFile, object $secondFile): array
@@ -79,7 +89,7 @@ function genDiffAST(object $firstFile, object $secondFile): array
     $firstFileAr = get_object_vars($firstFile);
     $secondFileAr = get_object_vars($secondFile);
     $keys = mergeArraysKeys($firstFileAr, $secondFileAr);
-    sort($keys);
+    $sortedKeys = nonMutationSort($keys);
     return array_map(function ($key) use ($firstFileAr, $secondFileAr) {
         if (!array_key_exists($key, $secondFileAr)) {
             return [
@@ -116,7 +126,7 @@ function genDiffAST(object $firstFile, object $secondFile): array
             "type" => 'unchanged',
             "value" => $secondFileAr[$key]
         ];
-    }, $keys);
+    }, $sortedKeys);
 }
 
 function gendiff(string $firstFile, string $secondFile, string $format = 'stylish'): string
