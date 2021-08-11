@@ -6,6 +6,7 @@ use SplFileInfo;
 
 use function Differ\Parsers\parser;
 use function Differ\Formatter\format;
+use function Funct\Collection\sortBy;
 
 function readFile(string $path): string
 {
@@ -72,16 +73,6 @@ function formating(array $array): string
 }
 
 /**
- * @param array<string> $array
- * @return array
- */
-function nonMutationSort(array $array): array
-{
-    sort($array);
-    return $array;
-}
-
-/**
  * @return array<array<string, mixed>>
  */
 function genDiffAST(object $firstFile, object $secondFile): array
@@ -89,7 +80,11 @@ function genDiffAST(object $firstFile, object $secondFile): array
     $firstFileAr = get_object_vars($firstFile);
     $secondFileAr = get_object_vars($secondFile);
     $keys = mergeArraysKeys($firstFileAr, $secondFileAr);
-    $sortedKeys = nonMutationSort($keys);
+    $sortedKeys = array_values(
+        sortBy($keys, function ($num) {
+            return $num;
+        })
+    );
     return array_map(function ($key) use ($firstFileAr, $secondFileAr) {
         if (!array_key_exists($key, $secondFileAr)) {
             return [

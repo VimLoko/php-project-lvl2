@@ -31,7 +31,8 @@
         "docopt/docopt": "^1.0",
         "ext-json": "*",
         "php": "^7.2||^8.0",
-        "symfony/yaml": "^5.0"
+        "symfony/yaml": "^5.0",
+        "funct/funct": "^1.5"
     },
     "require-dev": {
         "phpstan/phpstan-phpunit": "^0.12.16",
