@@ -42,12 +42,13 @@ function toString($value)
  */
 function mergeArraysKeys(array ...$arrays): array
 {
-    $result = [];
-    foreach ($arrays as $array) {
-        $result = [...$result, ...array_keys($array)];
-    }
+    $result = array_map(function ($array) {
+        return array_keys($array);
+    }, $arrays);
     return array_values(
-        array_unique($result)
+        array_unique(
+            array_merge(...$result)
+        )
     );
 }
 
